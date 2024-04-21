@@ -8,6 +8,7 @@ program
 
 program.parse();
 
+// TODO: рефакторити
 const options = program.opts();
 
 // TODO: рефакторити
