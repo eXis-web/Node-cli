@@ -30,7 +30,7 @@ async function getContactById(contactId) {
     return null;
   }
 }
-
+// TODO: рефакторити
 /**
  * Removes a contact by its ID from the contacts.json file.
  * Returns the removed contact if successful, or null if the contact is not found.
