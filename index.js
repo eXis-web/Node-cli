@@ -1,38 +1,49 @@
-import { program } from "commander";
+// index.js
+
+const { Command } = require('commander');
+const { listContacts, getContactById, removeContact, addContact } = require('./contacts');
+
+const program = new Command();
+
 program
-    .option("-a, --action <type>", "choose action")
-    .option("-i, --id <type>", "user id")
-    .option("-n, --name <type>", "user name")
-    .option("-e, --email <type>", "user email")
-    .option("-p, --phone <type>", "user phone");
+  .option('-a, --action <type>', 'choose action')
+  .option('-i, --id <type>', 'user id')
+  .option('-n, --name <type>', 'user name')
+  .option('-e, --email <type>', 'user email')
+  .option('-p, --phone <type>', 'user phone');
 
-program.parse();
+program.parse(process.argv);
 
-// TODO: рефакторити
-const options = program.opts();
-
-// TODO: рефакторити
-async function invokeAction({ action, id, name, email, phone }) {
+async function invokeAction() {
+  const { action, id, name, email, phone } = program.opts();
+  try {
     switch (action) {
-        case "list":
-            // ...
-            break;
+      case 'list':
+        const contacts = await listContacts();
+        console.table(contacts);
+        break;
 
-        case "get":
-            // ... id
-            break;
+      case 'get':
+        const contactById = await getContactById(id);
+        console.log(contactById);
+        break;
 
-        case "add":
-            // ... name email phone
-            break;
+      case 'add':
+        const addedContact = await addContact(name, email, phone);
+        console.log('Added contact:', addedContact);
+        break;
 
-        case "remove":
-            // ... id
-            break;
+      case 'remove':
+        const removedContact = await removeContact(id);
+        console.log('Removed contact:', removedContact);
+        break;
 
-        default:
-            console.warn("\x1B[31m Unknown action type!");
+      default:
+        console.warn('Unknown action type!');
     }
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
 }
 
-invokeAction(options);
+invokeAction();
